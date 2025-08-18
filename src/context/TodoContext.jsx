@@ -11,21 +11,28 @@ export const TodoProvider = ({children}) => {
         deleteTodo,
         updateTodo,
         setTodos
-    } = useTodos({orderBy: "list_order"})
+    } = useTodos()
 
     const handleToggleDone =  async (id, next) => {
-        setTodos(prev => prev.map(t => t.id === id ? { ...t, done: next } : t));
         await updateTodo(id, { done: next });
+        reload()
     };
+
+    const handleChangeTitle = async (id, itemTitle) => {
+        await updateTodo(id, { title: itemTitle });
+        reload();
+    }
 
     const value= useMemo(
         () => ({
             todos,
             reload,
+            setTodos,
             addTodo,
             deleteTodo,
             updateTodo,
             handleToggleDone,
+            handleChangeTitle
         }),
         [todos, reload, addTodo, deleteTodo, updateTodo]
     );
