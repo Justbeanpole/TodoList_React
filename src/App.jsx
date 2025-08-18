@@ -11,7 +11,7 @@ import {TodoProvider} from "./context/TodoContext.jsx";
 function App() {
     return (
         <TodoProvider>
-            <BrowserRouter>
+            <BrowserRouter basename="/TodoList_React">
                 <Routes>
                     {/* 그룹 1: 인증 레이아웃을 사용하는 페이지들 */}
                     <Route element={<SetTodoLayout/>}>
