@@ -4,8 +4,11 @@ const AddTodo = ({todoTitle, setTodoTitle, addTodo}) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        addTodo({title:todoTitle})
-        setTodoTitle("");
+        if (todoTitle && todoTitle.length > 0) {
+            addTodo({title:todoTitle})
+            setTodoTitle("");
+        }
+       else alert("내용을 입력해주세요");
     }
 
     return (
