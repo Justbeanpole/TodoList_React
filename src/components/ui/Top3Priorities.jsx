@@ -1,27 +1,24 @@
 import {Draggable, Droppable} from "react-beautiful-dnd";
-import {useTodos} from "../../hooks/useTodos.js";
 import TodoItem from "../todo/TodoItem.jsx";
-import {useMemo} from "react";
 
 
 const Top3Priorities = ({todos, deleteTodo, updateTodo, handleChangeTitle, handleToggleDone}) => {
     const lanes = ["high", "medium", "low"];
     return (
-        <div className="basis-1/3 p-5 pb-0 flex flex-col">
+        <div className="p-5 pb-0 flex flex-col">
             <h1 className="text-red-500 font-bold text-2xl mb-3">Top 3</h1>
-            <div className="flex-grow grid grid-rows-3 h-full gap-2 border-b-2 pb-2">
+            <div className="grid grid-rows-3 gap-2 border-b-2 pb-2">
                 {lanes.map((lane, index) => (
                     <Droppable key={lane} droppableId={`top3-${lane}`}>
                         {(provided) => (
                             <div
-                                className={" flex-col items-center hover:bg-gray-200 rounded-2xl"}
+                                className={"flex flex-col flex-nowrap justify-center min-h-16 hover:bg-gray-200 rounded-2xl relative"}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
                                 {todos
                                     .filter(todo => todo.priority === lane)
                                     .map((todo, index) => {
-                                        console.log(todo)
                                             return (
                                                 <Draggable
                                                     key={todo.id}
@@ -46,12 +43,13 @@ const Top3Priorities = ({todos, deleteTodo, updateTodo, handleChangeTitle, handl
                                         }
                                     )}
                                 {/* 여기에 Draggable 아이템(이미 top3에 배치된 것들)이 들어옴 */}
-                                {provided.placeholder}
+                                <div className="absolute inset-0 pointer-events-none"
+                                >{provided.placeholder}</div>
+
                             </div>
                         )}
                     </Droppable>
                 ))}
-
             </div>
         </div>
     )
