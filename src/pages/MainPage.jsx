@@ -6,18 +6,20 @@ import {useTodoContext} from "../context/TodoContext.jsx";
 
 const MainPage = () => {
     const [todoTitle, setTodoTitle] = useState("");
-    const {todos, reload, addTodo, deleteTodo, updateTodo, handleToggleDone} = useTodoContext();
+    const {todos, reload, addTodo, deleteTodo, updateTodo, handleToggleDone, handleChangeTitle} = useTodoContext();
 
     return (
-        <div className="flex flex-col items-center h-full justify-center">
+        <div className="flex flex-col items-center h-screen">
+            <div className="w-full max-w-2xl shrink-0 pt-52 pb-4">
             <DateHeader></DateHeader>
-            <div className="content w-full max-w-2xl">
                 <AddTodo
                     todoTitle={todoTitle}
                     setTodoTitle={setTodoTitle}
                     addTodo={addTodo}
                 ></AddTodo>
-                <ul className="w-3/4 justify-self-center mt-8 bg-white border-gray-300 pb-1 mb-3 flex flex-col gap-2">
+            </div>
+            <div className="w-1/3 flex justify-center overflow-y-auto scrollbar-hide">
+                <ul className="w-full justify-self-center mt-8 bg-white border-gray-300 pb-1 mb-3 flex flex-col gap-2 ">
                     {todos.map((todo)=>
                         (
                         <TodoItem
@@ -26,8 +28,10 @@ const MainPage = () => {
                             updateTodo={updateTodo}
                             deleteTodo={deleteTodo}
                             handleToggleDone={handleToggleDone}
+                            handleChangeTitle={handleChangeTitle}
                         ></TodoItem>
-                    ))}
+                        )
+                    )}
                 </ul>
             </div>
         </div>
