@@ -2,12 +2,12 @@ import {useCallback, useEffect, useState} from "react";
 import {getTodos} from "../components/api/todos.js";
 import {superbase} from "../lib/superbase.js";
 
-export const useTodos = (filter) => {
+export const useTodos = () => {
     const [todos, setTodos] = useState([]);
     const reload = useCallback(async () => {
-        const data = await getTodos(filter);
+        const data = await getTodos();
         setTodos(data ?? []);
-    }, [filter]);
+    }, []);
 
     useEffect(() => {
         reload();
