@@ -1,14 +1,14 @@
-import {Fragment, useMemo} from "react";
+import {Fragment} from "react";
 import {Draggable, Droppable} from "react-beautiful-dnd";
 import TodoItem from "../todo/TodoItem.jsx";
 
 const TimeTable = ({hours, todos, deleteTodo, updateTodo, handleChangeTitle,handleToggleDone}) => {
     return (
-        <div className="basis-3/5 p-5 flex flex-col bg-white text-gray-800 rounded-2xl">
+        <div className="basis-3/5 p-5 flex flex-col h-screen bg-white text-gray-800 rounded-2xl">
             <h1 className="text-black font-bold text-2xl pb-4">Time Table</h1>
-            <div className="grid grid-cols-[0.2fr_1fr_1fr] grid-rows-19 flex-grow h-full text-center">
+            <div className="grid grid-cols-[0.2fr_1fr_1fr] grid-rows-19 text-center h-full overflow-y-scroll scrollbar-hide">
                 {/* Header */}
-                <div className="text-sm font-semibold text-gray-500 border-b border-r border-gray-300 py-2">Hour</div>
+                <div className="text-sm font-semibold text-gray-500 border-b border-r border-gray-300 py-2"></div>
                 <div className="text-sm font-semibold text-gray-500 border-b border-r border-gray-300 py-2">:00</div>
                 <div className="text-sm font-semibold text-gray-500 border-b border-gray-300 py-2">:30</div>
 
@@ -16,19 +16,18 @@ const TimeTable = ({hours, todos, deleteTodo, updateTodo, handleChangeTitle,hand
                 {hours.map(([t00, t30], idx) => (
                     <Fragment key={idx}>
                         <div
-                            className="text-center text-sm text-gray-500 border-b border-r border-gray-300 py-2">
+                            className="flex justify-center items-center text-sm min-h-16 text-gray-500 border-b border-r border-gray-300 py-2">
                             {t00.slice(-5, -3)}
                         </div>
                         <Droppable droppableId={`slot-${t00}`}>
                             {(provided) => (
-                                <div className="border-b border-r border-gray-300 hover:bg-gray-50"
+                                <div className="border-b border-r border-gray-300 hover:bg-gray-50 relative"
                                      ref={provided.innerRef}
                                      {...provided.droppableProps}
                                 >
                                     {todos
                                         .filter(todo => todo.schedule_time === t00)
                                         .map((todo, index) => {
-                                            console.log(todo)
                                             return (
                                                 <Draggable
                                                     key={String(todo.id)}
@@ -53,7 +52,8 @@ const TimeTable = ({hours, todos, deleteTodo, updateTodo, handleChangeTitle,hand
                                                 </Draggable>)
                                         })
                                     }
-                                    {provided.placeholder}
+                                    <div className="absolute"
+                                    >{provided.placeholder}</div>
                                 </div>
                             )}
                         </Droppable>
