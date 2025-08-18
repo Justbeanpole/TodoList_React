@@ -10,8 +10,6 @@ const SetTodoLayout = () => {
     let nextPath = null;
     if (location.pathname === "/") {
         nextPath = "/setPriority";
-    } else if (location.pathname === "/setPriority") {
-        nextPath = "/todos"; // CalendarPage 경로
     }
 
     return (
@@ -23,7 +21,7 @@ const SetTodoLayout = () => {
                     <Outlet/>
                 </main>
             </div>
-            <NextButton nextPath={nextPath}></NextButton>
+            {nextPath && <NextButton nextPath={nextPath}></NextButton>}
         </div>
     );
 };
