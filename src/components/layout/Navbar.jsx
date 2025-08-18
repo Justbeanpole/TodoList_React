@@ -19,9 +19,6 @@ const Navbar = () => {
                 <Link to="/setPriority" className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-200">
                     <Waypoints size={25}></Waypoints>
                 </Link>
-                <Link to="/todos" className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-200">
-                    <Calendar size={25}/>
-                </Link>
             </nav>
         </div>
     );
