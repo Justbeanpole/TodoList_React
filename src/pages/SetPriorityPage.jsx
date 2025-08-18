@@ -13,7 +13,6 @@ import {
 const SetPriorityPage = () => {
 
     useEffect(() => {
-        document.
         document.title = "Priority";
     },[])
 
@@ -161,10 +160,11 @@ const SetPriorityPage = () => {
                 }
             }
             else{
+                console.log(id)
                 setTodos(prev => prev.map(t =>
                     t.id === id ? {...t, priority: level} : t
                 ));
-                updateTodo(id.slice(5), {priority: level});
+                updateTodo(id, {priority: level});
             }
         }
 
