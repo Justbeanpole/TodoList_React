@@ -8,6 +8,10 @@ const MainPage = () => {
     const [todoTitle, setTodoTitle] = useState("");
     const {todos, reload, addTodo, deleteTodo, updateTodo, handleToggleDone, handleChangeTitle} = useTodoContext();
 
+    useEffect(() => {
+        document.title = "Todo";
+    },[])
+
     return (
         <div className="flex flex-col items-center h-screen">
             <div className="w-full max-w-2xl shrink-0 pt-52 pb-4">

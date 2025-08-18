@@ -1,5 +1,5 @@
 import TodoItem from "../components/todo/TodoItem.jsx";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import Top3Priorities from "../components/ui/Top3Priorities.jsx";
 import TimeTable from "../components/ui/TimeTable.jsx";
 import {useTodoContext} from "../context/TodoContext.jsx";
@@ -11,6 +11,12 @@ import {
 
 
 const SetPriorityPage = () => {
+
+    useEffect(() => {
+        document.
+        document.title = "Priority";
+    },[])
+
     const {
         todos,
         deleteTodo,
