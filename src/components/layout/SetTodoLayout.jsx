@@ -1,7 +1,7 @@
 import {Outlet, useLocation} from 'react-router-dom';
 import Navbar from "./Navbar.jsx";
 import React from "react";
-import NextButton from "../ui/NextButton.jsx";
+import NextButton from "./NextButton.jsx";
 
 const SetTodoLayout = () => {
     const location = useLocation();
