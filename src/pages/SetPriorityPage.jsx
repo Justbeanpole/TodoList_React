@@ -102,48 +102,77 @@ const SetPriorityPage = () => {
                     }
                 }
             }
-            else{
+            //없다면
+            // Todo -> 타임테이블
+            else if (source.droppableId === "todoList" && destination.droppableId.startsWith("slot-")) {
+                setTodos(prev => prev.map(t => t.id === id ? {...t, schedule_time: scheduled} : t));
+                await updateTodo(id, {schedule_time: scheduled});
+            }
+            // 우선순위 -> 타임테이블
+            else if (source.droppableId.startsWith("top3-") && destination.droppableId.startsWith("slot-")) {
                 setTodos(prev => prev.map(t =>
-                    t.id === id.slice(5) ? {...t, schedule_time: slotKey} : t
+                    t.id === id ? {...t, schedule_time: scheduled} : t
                 ));
-                updateTodo(id.slice(5), {schedule_time: slotKey});
+                await updateTodo(id, {schedule_time: scheduled});
+            }
+            // 이미 존재하는 todo도 없고 타임테이블 내에서 움직일 때
+            else{
+                const slotId = id.slice(5); // 타임테이블 내에서 이동하기 때문에 draggableId는 slot이 붙어있는 상태
+                setTodos(prev => prev.map(t => t.id === slotId ? {...t, schedule_time: scheduled} : t))
+                await updateTodo(slotId, {schedule_time: scheduled});
             }
         }
 
         // 도착지 Top3 Priority
         // 우선순위 슬롯 내에 이미 존재하는 경우
         if (destination.droppableId.startsWith("top3-")) {
-            const level = destination.droppableId.slice(5);
-            const isExisting = todos.filter((t) => t.priority === level && t.id !== id);
+            const lane = destination.droppableId.slice(5); // priority 값 앞에 top3-가 붙어있으므로 제거
+            const isExisting = todos.filter((t) => t.priority === lane && t.id !== id);
+            //이미 그 자리에 todo가 있다면
             if (isExisting.length >= 1) {
                 // 우선순위 내에서
                 if (source.droppableId.startsWith("top3-") && destination.droppableId.startsWith("top3-")) {
                     const newLane = source.droppableId.slice(5);
-                    if (oldLane) {
+                    if (lane) {
                         setTodos(prev => {
                             // 목적지 lane에 이미 있으면 그 아이는 해제(null)
-                            const existing = prev.find(t => t.priority === oldLane);
+                            const existing = prev.find(t => t.priority === lane);
                             const next = prev.map(t => {
-                                if (t.id === id) return {...t, priority: oldLane};          // 새로운 것
+                                if (t.id === id) return {...t, priority: lane};          // 새로운 것
                                 if (existing && t.id === existing.id) return {...t, priority: newLane}; // 기존
                                 return t;
                             });
                             return next;
                         });
-                        const existing = todos.find(t => t.priority === oldLane);
-                        await updateTodo(id, {priority: oldLane});
+                        const existing = todos.find(t => t.priority === lane);
+                        await updateTodo(id, {priority: lane});
                         if (existing && existing.id !== id) {
                             await updateTodo(existing.id, {priority: newLane});
                         }
                     }
                 }
             }
-            else{
-                console.log(id)
+            //없다면
+            // todo리스트 -> 우선순위
+            else if (source.droppableId === "todoList" && destination.droppableId.startsWith("top3-")) {
+                if (lane) {
+                    setTodos(prev => prev.map(t =>
+                        t.id === id ? {...t, priority: lane} : t
+                    ));
+                    await updateTodo(id, {priority: lane});
+                }
+            }
+            // 타임테이블 -> 우선순위
+            else if (source.droppableId.startsWith("slot-") && destination.droppableId.startsWith("top3-")) {
                 setTodos(prev => prev.map(t =>
-                    t.id === id ? {...t, priority: level} : t
+                    t.id === id ? {...t, priority: lane} : t
                 ));
-                updateTodo(id, {priority: level});
+                await updateTodo(id.slice(5), {priority: lane});
+            }
+            // 이미 존재하는 todo도 없고 우선순위 내에서 움직일 때
+            else {
+                setTodos(prev => prev.map(t => t.id === id ? {...t, priority: lane} : t))
+                await updateTodo(id, {priority: lane});
             }
         }
 
@@ -163,23 +192,22 @@ const SetPriorityPage = () => {
             setTodos(next);
             await updateTodo(id, {list_order: newOrder})
         }
-        // todo리스트 -> 우선순위
-        if (source.droppableId === "todoList" && destination.droppableId.startsWith("top3-")) {
-            const lane = destination.droppableId.slice(5);
-            if (lane) {
-                setTodos(prev => prev.map(t =>
-                    t.id === id ? {...t, priority: lane} : t
-                ));
-                await updateTodo(id, {priority: lane});
-            }
-        }
-        // todo리스트 -> 타임테이블
-        if (source.droppableId === "todoList" && destination.droppableId.startsWith("slot-")) {
-            const scheduled = destination.droppableId.slice(5);
+
+        // 타임테이블 -> todo리스트
+        if (source.droppableId.startsWith("slot-") && destination.droppableId === "todoList") {
             setTodos(prev => prev.map(t =>
-                t.id === id ? {...t, schedule_time: scheduled} : t
+                t.id === id ? {...t, schedule_time: null} : t
             ));
-            await updateTodo(id, {schedule_time: scheduled});
+            await updateTodo(id.slice(5), {schedule_time: null});
+        }
+
+        // 우선순위 -> todo리스트
+        if (source.droppableId.startsWith("top3-") && destination.droppableId === "todoList") {
+            const lane = source.droppableId.slice(5);
+            setTodos(prev => prev.map(t =>
+                t.priority === lane ? {...t, priority: null} : t
+            ));
+            await updateTodo(id, {priority: null});
         }
 
     }
