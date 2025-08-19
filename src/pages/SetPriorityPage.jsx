@@ -33,7 +33,7 @@ const SetPriorityPage = () => {
         () => todos.filter(t => t.priority != null),
         [todos]
     );
-
+//00, 30분 만듦
     const slots = useMemo(() => {
         const times = [];
         for (let h = 5; h <= 23; h++) {
@@ -42,7 +42,7 @@ const SetPriorityPage = () => {
         }
         return times;
     }, [todos]);
-
+// 00, 30분을 시간에 대입
     const hours = useMemo(() => {
         const row = [];
         for (let hour = 0; hour < slots.length; hour += 2) {
@@ -50,7 +50,7 @@ const SetPriorityPage = () => {
         }
         return row
     }, [slots])
-
+//List order값 설정 -> 1000단위씩 차이나도록 조정
     const setListOrder = (prevItem, nextItem) => {
         const GAP = 1000;
         const toNum = (v) => (v == null ? null : Number(v));
@@ -61,7 +61,7 @@ const SetPriorityPage = () => {
         if (prev != null && next == null) return prev + GAP; // 맨 뒤
         return GAP; // 비어 있는 리스트
     }
-
+//드래그앤드랍할 때, 발생하는 이벤트
     const onDragEnd = async (result) => {
         const {source, destination, draggableId} = result;
         const id = draggableId
@@ -72,37 +72,35 @@ const SetPriorityPage = () => {
             source.index === destination.index
         ) return;
 
-        /*=== Start : TimeTable ===*/
-
+        // 도착지 TimeTable
         // 타임테이블 슬롯 내 이미 존재하는 경우, 취소시킴
         if (destination.droppableId.startsWith("slot-")) {
-            const slotKey = destination.droppableId.slice(5); // 'HH:MM'
-            const isExisting = todos.filter((t) => t.schedule_time === slotKey && t.id !== id.slice(5));
+            const scheduled = destination.droppableId.slice(5); // 'HH:MM'
+            const isExisting = todos.filter((t) => t.schedule_time === scheduled && t.id !== id.slice(5));
+            // 이미 존재하는 값이 있다면
             if (isExisting.length >= 1) {
                 // 타임테이블 내에서
                 if (source.droppableId.startsWith("slot-") && destination.droppableId.startsWith("slot-")) {
-                    const oldScheduled = destination.droppableId.slice(5);
                     const newScheduled = source.droppableId.slice(5);
-                    if (oldScheduled && newScheduled) {
+                    if (scheduled && newScheduled) {
                         setTodos(prev => {
                             // 목적지 slot에 이미 있으면 그 아이는 해제(null)
-                            const existing = prev.find(t => t.schedule_time === oldScheduled);
+                            const existing = prev.find(t => t.schedule_time === scheduled);
                             const next = prev.map(t => {
-                                if (t.id === id) return {...t, schedule_time: oldScheduled};        // 새로운 것
-                                if (existing && t.id === existing.id) return {...t, priority: newScheduled}; // 기존
+                                if (t.id === id) return {...t, schedule_time: scheduled}; // 드래그한 객체 스케줄 값 변경
+                                if (existing && t.id === existing.id) return {...t, priority: newScheduled}; // 기존 객체 드래그 객체의 스케줄로 변경
                                 return t;
                             });
                             return next;
                         });
-                        const existing = todos.find(t => t.schedule_time === oldScheduled);
-                        await updateTodo(id.slice(5), {schedule_time: oldScheduled});
+                        const existing = todos.find(t => t.schedule_time === scheduled);
+                        await updateTodo(id.slice(5), {schedule_time: scheduled});
                         if (existing && existing.id !== id) {
                             console.log(existing);
                             await updateTodo(existing.id, {schedule_time: newScheduled});
                         }
                     }
                 }
-                return
             }
             else{
                 setTodos(prev => prev.map(t =>
@@ -112,25 +110,7 @@ const SetPriorityPage = () => {
             }
         }
 
-        // 타임테이블 -> todo리스트
-        if (source.droppableId.startsWith("slot-") && destination.droppableId === "todoList") {
-            console.log(id)
-            setTodos(prev => prev.map(t =>
-                t.id === id ? {...t, schedule_time: null} : t
-            ));
-            await updateTodo(id.slice(5), {schedule_time: null});
-        }
-        // 타임테이블 -> 우선순위
-        if (source.droppableId.startsWith("slot-") && destination.droppableId.startsWith("top3-")) {
-            const lane = destination.droppableId.slice(5);
-            setTodos(prev => prev.map(t =>
-                t.id === id ? {...t, priority: lane} : t
-            ));
-            await updateTodo(id.slice(5), {priority: lane});
-        }
-
-        /*=== Start : Priority ===*/
-
+        // 도착지 Top3 Priority
         // 우선순위 슬롯 내에 이미 존재하는 경우
         if (destination.droppableId.startsWith("top3-")) {
             const level = destination.droppableId.slice(5);
@@ -138,7 +118,6 @@ const SetPriorityPage = () => {
             if (isExisting.length >= 1) {
                 // 우선순위 내에서
                 if (source.droppableId.startsWith("top3-") && destination.droppableId.startsWith("top3-")) {
-                    const oldLane = destination.droppableId.slice(5);
                     const newLane = source.droppableId.slice(5);
                     if (oldLane) {
                         setTodos(prev => {
@@ -168,26 +147,7 @@ const SetPriorityPage = () => {
             }
         }
 
-        // 우선순위 -> todo리스트
-        if (source.droppableId.startsWith("top3-") && destination.droppableId === "todoList") {
-            const lane = source.droppableId.slice(5);
-            setTodos(prev => prev.map(t =>
-                t.priority === lane ? {...t, priority: null} : t
-            ));
-            await updateTodo(id, {priority: null});
-        }
-
-        // 우선순위 -> 타임테이블
-        if (source.droppableId.startsWith("top3-") && destination.droppableId.startsWith("slot-")) {
-            const scheduled = destination.droppableId.slice(5);
-            setTodos(prev => prev.map(t =>
-                t.id === id ? {...t, schedule_time: scheduled} : t
-            ));
-            await updateTodo(id, {schedule_time: scheduled});
-        }
-
-        /*=== Start : TodoList ===*/
-
+        // 도착지 TodoList
         // todo리스트 내에서
         if (source.droppableId === "todoList" && destination.droppableId === "todoList") {
             const next = (() => {
@@ -221,6 +181,7 @@ const SetPriorityPage = () => {
             ));
             await updateTodo(id, {schedule_time: scheduled});
         }
+
     }
 
     return (
