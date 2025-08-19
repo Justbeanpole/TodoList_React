@@ -13,7 +13,7 @@ function App() {
         <TodoProvider>
             <BrowserRouter basename="/TodoList_React">
                 <Routes>
-                    {/* 그룹 1: 인증 레이아웃을 사용하는 페이지들 */}
+                    {/* 그룹 1: Todo 입력 및 설정 레이아웃을 사용하는 페이지들 */}
                     <Route element={<SetTodoLayout/>}>
                         <Route path="/" element={<MainPage/>}/>
                         <Route path="/setPriority" element={<SetPriorityPage/>}/>
