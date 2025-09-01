@@ -1,9 +1,10 @@
 import {useTodos} from "../hooks/useTodos.js";
-import {createContext, useContext, useMemo} from "react";
+import {createContext, useContext, useMemo, useState} from "react";
 
 export const TodoContext = createContext();
 
 export const TodoProvider = ({children}) => {
+
     const {
         todos,
         reload,
@@ -32,7 +33,7 @@ export const TodoProvider = ({children}) => {
             deleteTodo,
             updateTodo,
             handleToggleDone,
-            handleChangeTitle
+            handleChangeTitle,
         }),
         [todos, reload, addTodo, deleteTodo, updateTodo]
     );

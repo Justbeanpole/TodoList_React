@@ -22,7 +22,8 @@ const SetPriorityPage = () => {
         updateTodo,
         handleToggleDone,
         handleChangeTitle,
-        setTodos
+        setTodos,
+        setIsEditing,
     } = useTodoContext();
 
     const unprioritized = useMemo(
@@ -96,7 +97,6 @@ const SetPriorityPage = () => {
                         const existing = todos.find(t => t.schedule_time === scheduled);
                         await updateTodo(id.slice(5), {schedule_time: scheduled});
                         if (existing && existing.id !== id) {
-                            console.log(existing);
                             await updateTodo(existing.id, {schedule_time: newScheduled});
                         }
                     }

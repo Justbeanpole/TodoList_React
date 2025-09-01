@@ -45,7 +45,6 @@ const Top3Priorities = ({todos, deleteTodo, updateTodo, handleChangeTitle, handl
                                 {/* 여기에 Draggable 아이템(이미 top3에 배치된 것들)이 들어옴 */}
                                 <div className="absolute inset-0 pointer-events-none"
                                 >{provided.placeholder}</div>
-
                             </div>
                         )}
                     </Droppable>

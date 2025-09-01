@@ -6,8 +6,9 @@ import {useTodoContext} from "../context/TodoContext.jsx";
 
 const MainPage = () => {
     const [todoTitle, setTodoTitle] = useState("");
-    const {todos, reload, addTodo, deleteTodo, updateTodo, handleToggleDone, handleChangeTitle} = useTodoContext();
+    const {todos, addTodo, deleteTodo, updateTodo, handleToggleDone, handleChangeTitle} = useTodoContext();
 
+    //page 타이틀 변경
     useEffect(() => {
         document.title = "Todo";
     },[])

@@ -2,6 +2,7 @@ import {Plus} from "lucide-react";
 
 const AddTodo = ({todoTitle, setTodoTitle, addTodo}) => {
 
+    //todo 내용 추가
     const onSubmit = (e) => {
         e.preventDefault();
         if (todoTitle && todoTitle.length > 0) {

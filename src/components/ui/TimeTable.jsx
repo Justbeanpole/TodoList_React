@@ -14,11 +14,13 @@ const TimeTable = ({hours, todos, deleteTodo, updateTodo, handleChangeTitle,hand
 
                 {/* Content */}
                 {hours.map(([t00, t30], idx) => (
+                    // 시간 부분
                     <Fragment key={idx}>
                         <div
                             className="flex justify-center items-center text-sm min-h-16 text-gray-500 border-b border-r border-gray-300 py-2">
                             {t00.slice(-5, -3)}
                         </div>
+                        {/*~시 00분 영역*/}
                         <Droppable droppableId={`slot-${t00}`}>
                             {(provided) => (
                                 <div className="border-b border-r min-w-0 border-gray-300 hover:bg-gray-50 relative"
@@ -56,6 +58,7 @@ const TimeTable = ({hours, todos, deleteTodo, updateTodo, handleChangeTitle,hand
                                 </div>
                             )}
                         </Droppable>
+                        {/*~시 30분 영역*/}
                         <Droppable droppableId={`slot-${t30}`}>
                             {(provided) => (
                                 <div className="border-b min-w-0 border-gray-300 hover:bg-gray-50"

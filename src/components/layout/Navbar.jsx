@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {ListTodo, Home, Calendar} from 'lucide-react'; // 아이콘 사용
+import {ListTodo, Home} from 'lucide-react'; // 아이콘 사용
 import { Waypoints } from 'lucide-react';
 
 const Navbar = () => {
@@ -13,9 +13,11 @@ const Navbar = () => {
                 </Link>
 
                 {/* 네비게이션 링크 */}
+                {/* Main Page */}
                 <Link to="/" className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-200">
                     <Home size={25}/>
                 </Link>
+                {/* Priority Page */}
                 <Link to="/setPriority" className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-200">
                     <Waypoints size={25}></Waypoints>
                 </Link>
