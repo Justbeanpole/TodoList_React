@@ -14,30 +14,31 @@ const MainPage = () => {
 
     return (
         <div className="flex flex-col items-center h-screen">
-            <div className="w-full max-w-2xl shrink-0 pt-52 pb-4">
+            <div className="w-full max-w-2xl pt-52 flex flex-col">
             <DateHeader></DateHeader>
                 <AddTodo
                     todoTitle={todoTitle}
                     setTodoTitle={setTodoTitle}
                     addTodo={addTodo}
                 ></AddTodo>
+                <div className="w-2/3 overflow-y-auto scrollbar-hide self-center">
+                    <ul className="w-full mt-8 bg-white border-gray-300 pb-1 mb-3 flex flex-col gap-2">
+                        {todos.map((todo)=>
+                            (
+                                <TodoItem
+                                    todo={todo}
+                                    key={todo.id}
+                                    updateTodo={updateTodo}
+                                    deleteTodo={deleteTodo}
+                                    handleToggleDone={handleToggleDone}
+                                    handleChangeTitle={handleChangeTitle}
+                                ></TodoItem>
+                            )
+                        )}
+                    </ul>
+                </div>
             </div>
-            <div className="w-1/3 flex justify-center overflow-y-auto scrollbar-hide">
-                <ul className="w-full justify-self-center mt-8 bg-white border-gray-300 pb-1 mb-3 flex flex-col gap-2 ">
-                    {todos.map((todo)=>
-                        (
-                        <TodoItem
-                            todo={todo}
-                            key={todo.id}
-                            updateTodo={updateTodo}
-                            deleteTodo={deleteTodo}
-                            handleToggleDone={handleToggleDone}
-                            handleChangeTitle={handleChangeTitle}
-                        ></TodoItem>
-                        )
-                    )}
-                </ul>
-            </div>
+
         </div>
     );
 }
