@@ -1,5 +1,5 @@
 import {useTodos} from "../hooks/useTodos.js";
-import {createContext, useContext, useMemo, useState} from "react";
+import {createContext, useContext, useMemo} from "react";
 
 export const TodoContext = createContext();
 

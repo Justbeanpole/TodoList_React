@@ -8,7 +8,7 @@ const Top3Priorities = ({todos, deleteTodo, updateTodo, handleChangeTitle, handl
         <div className="p-5 pb-0 flex flex-col">
             <h1 className="text-red-500 font-bold text-2xl mb-3">Top 3</h1>
             <div className="grid grid-rows-3 gap-2 border-b-2 pb-2">
-                {lanes.map((lane, index) => (
+                {lanes.map((lane) => (
                     <Droppable key={lane} droppableId={`top3-${lane}`}>
                         {(provided) => (
                             <div

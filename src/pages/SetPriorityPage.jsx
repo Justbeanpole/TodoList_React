@@ -23,7 +23,6 @@ const SetPriorityPage = () => {
         handleToggleDone,
         handleChangeTitle,
         setTodos,
-        setIsEditing,
     } = useTodoContext();
 
     const unprioritized = useMemo(
@@ -137,12 +136,11 @@ const SetPriorityPage = () => {
                         setTodos(prev => {
                             // 목적지 lane에 이미 있으면 그 아이는 해제(null)
                             const existing = prev.find(t => t.priority === lane);
-                            const next = prev.map(t => {
+                            return prev.map(t => {
                                 if (t.id === id) return {...t, priority: lane};          // 새로운 것
                                 if (existing && t.id === existing.id) return {...t, priority: newLane}; // 기존
                                 return t;
                             });
-                            return next;
                         });
                         const existing = todos.find(t => t.priority === lane);
                         await updateTodo(id, {priority: lane});
