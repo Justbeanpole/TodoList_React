@@ -14,7 +14,7 @@ const SetPriorityPage = () => {
 
     useEffect(() => {
         document.title = "Priority";
-    },[])
+    }, [])
 
     const {
         todos,
@@ -102,7 +102,7 @@ const SetPriorityPage = () => {
                     }
                 }
             }
-            //없다면
+                //없다면
             // Todo -> 타임테이블
             else if (source.droppableId === "todoList" && destination.droppableId.startsWith("slot-")) {
                 setTodos(prev => prev.map(t => t.id === id ? {...t, schedule_time: scheduled} : t));
@@ -116,7 +116,7 @@ const SetPriorityPage = () => {
                 await updateTodo(id, {schedule_time: scheduled});
             }
             // 이미 존재하는 todo도 없고 타임테이블 내에서 움직일 때
-            else{
+            else {
                 const slotId = id.slice(5); // 타임테이블 내에서 이동하기 때문에 draggableId는 slot이 붙어있는 상태
                 setTodos(prev => prev.map(t => t.id === slotId ? {...t, schedule_time: scheduled} : t))
                 await updateTodo(slotId, {schedule_time: scheduled});
@@ -152,7 +152,7 @@ const SetPriorityPage = () => {
                     }
                 }
             }
-            //없다면
+                //없다면
             // todo리스트 -> 우선순위
             else if (source.droppableId === "todoList" && destination.droppableId.startsWith("top3-")) {
                 if (lane) {
@@ -215,7 +215,7 @@ const SetPriorityPage = () => {
     return (
         <div className="flex h-screen justify-center gap-4">
             <DragDropContext onDragEnd={onDragEnd}>
-                <div className="basis-2/6 flex flex-col">
+                <div className="flex flex-col w-1/4">
                     <Top3Priorities
                         todos={prioritized}
                         deleteTodo={deleteTodo}
@@ -225,7 +225,7 @@ const SetPriorityPage = () => {
                     ></Top3Priorities>
                     <Droppable droppableId="todoList">
                         {(provided) => (
-                            <div className="basis-3/4 p-5 flex flex-col gap-2 h-full overflow-y-auto scrollbar-hide"
+                            <div className="p-5 flex flex-col gap-2 h-full overflow-y-auto scrollbar-hide"
                                  ref={provided.innerRef}
                                  {...provided.droppableProps}>
                                 {unprioritized.map((todo, index) => {
@@ -258,14 +258,16 @@ const SetPriorityPage = () => {
                         )}
                     </Droppable>
                 </div>
-                <TimeTable
-                    hours={hours}
-                    todos={todos}
-                    deleteTodo={deleteTodo}
-                    updateTodo={updateTodo}
-                    handleChangeTitle={handleChangeTitle}
-                    handleToggleDone={handleToggleDone}
-                ></TimeTable>
+                <div className="w-3/4">
+                    <TimeTable
+                        hours={hours}
+                        todos={todos}
+                        deleteTodo={deleteTodo}
+                        updateTodo={updateTodo}
+                        handleChangeTitle={handleChangeTitle}
+                        handleToggleDone={handleToggleDone}
+                    ></TimeTable>
+                </div>
             </DragDropContext>
         </div>
     )
