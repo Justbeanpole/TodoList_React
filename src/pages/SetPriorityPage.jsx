@@ -86,12 +86,12 @@ const SetPriorityPage = () => {
                         setTodos(prev => {
                             // 목적지 slot에 이미 있으면 그 아이는 해제(null)
                             const existing = prev.find(t => t.schedule_time === scheduled);
-                            const next = prev.map(t => {
+                            return prev.map(t => {
                                 if (t.id === id) return {...t, schedule_time: scheduled}; // 드래그한 객체 스케줄 값 변경
                                 if (existing && t.id === existing.id) return {...t, priority: newScheduled}; // 기존 객체 드래그 객체의 스케줄로 변경
                                 return t;
                             });
-                            return next;
+
                         });
                         const existing = todos.find(t => t.schedule_time === scheduled);
                         await updateTodo(id.slice(5), {schedule_time: scheduled});
